@@ -1,0 +1,67 @@
+name: Free iPhone IPA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/free-ipa.yml'
+      - 'App/**'
+      - 'Widgets/**'
+      - 'Shared/**'
+      - 'Tests/**'
+      - 'Config/**'
+      - 'Assets.xcassets/**'
+      - 'Datenblick.xcodeproj/**'
+      - 'scripts/**'
+      - 'Package.swift'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: free-ipa-${{ github.repository }}
+  cancel-in-progress: true
+
+jobs:
+  free-ipa:
+    # Public repositories use GitHub's free standard hosted runners. This guard
+    # runs before allocating a runner; private/internal repositories are skipped.
+    if: ${{ github.event.repository.private == false && github.event.repository.visibility == 'public' }}
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Generate and validate the native project
+        run: |
+          node scripts/generate-project.mjs
+          node scripts/verify-project.mjs
+          node scripts/verify-ipa.mjs --self-test
+
+      - name: Test decoding, storage and calculations
+        run: swift test
+
+      - name: Build the app and widget for a physical iPhone without an identity
+        run: >-
+          xcodebuild -project Datenblick.xcodeproj -scheme Datenblick
+          -configuration Release -destination 'generic/platform=iOS'
+          -derivedDataPath build/free-ipa
+          CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
+          CODE_SIGN_IDENTITY="" DEVELOPMENT_TEAM="" build
+
+      - name: Package an ad-hoc IPA that preserves App Group entitlements
+        run: |
+          python3 scripts/package-ipa.py --app build/free-ipa/Build/Products/Release-iphoneos/Datenblick.app --output dist/Datenblick-unsigned.ipa
+          node scripts/verify-ipa.mjs dist/Datenblick-unsigned.ipa
+
+      - name: Downloadable artifact for local free Apple ID signing
+        uses: actions/upload-artifact@v4
+        with:
+          name: Datenblick-free-sideload
+          path: dist/Datenblick-unsigned.ipa
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0

@@ -1,0 +1,19 @@
+name: Native iOS checks
+on: workflow_dispatch
+permissions:
+  contents: read
+jobs:
+  build:
+    if: ${{ github.event.repository.private == false }}
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test decoding, storage and calculations
+        run: swift test
+      - name: Build app and embedded widget for Simulator
+        run: >-
+          xcodebuild -project Datenblick.xcodeproj -scheme Datenblick
+          -configuration Debug -destination 'generic/platform=iOS Simulator'
+          -derivedDataPath build CODE_SIGNING_ALLOWED=NO build
+
