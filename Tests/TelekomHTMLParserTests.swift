@@ -19,7 +19,8 @@ final class TelekomHTMLParserTests: XCTestCase {
         let result = try TelekomHTMLParser.decode(page(extra: time), now: now)
         XCTAssertEqual(result.totalBytes!, 20_000_000_000, accuracy: 0.001)
         XCTAssertEqual(result.usedBytes, 12_770_000_000, accuracy: 0.001)
-        XCTAssertEqual(result.cycleEnd!.timeIntervalSince(now), 8 * 86_400 + 14 * 3_600 + 5 * 60 + 10, accuracy: 0.001)
+        let expectedSeconds: Int = 8 * 86_400 + 14 * 3_600 + 5 * 60 + 10
+        XCTAssertEqual(result.cycleEnd!.timeIntervalSince(now), TimeInterval(expectedSeconds), accuracy: 0.001)
         XCTAssertEqual(result.fetchedAt, now)
     }
 
