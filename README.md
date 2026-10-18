@@ -2,9 +2,9 @@
 
 Native, deutschsprachige SwiftUI-App für einen Telekom-Anschluss mit echter WidgetKit-Erweiterung. Ab iOS 17, auch für iPad. Eigenständiges Projekt, kein offizielles Telekom-Produkt.
 
-**Lieferstand:** App- und Widget-Quellcode, direkt zu öffnendes Xcode-Projekt, Icon, Entitlements, Datenschutzerklärung in der App und Tests sind enthalten. Auf dem Windows-Entwicklungsrechner fehlen Xcode und das iOS-SDK. Deshalb wurde noch kein nativer Build oder Simulatorlauf ausgeführt und keine App auf einem iPhone installiert. Es gibt noch keine signierte `.ipa` und keinen TestFlight-Link.
+**Lieferstand am 18.10.2026:** App und Widget wurden auf einem GitHub-Cloud-Mac mit Xcode 16.4 erfolgreich für ein echtes iPhone gebaut. Alle 53 Swift-Kerntests und die Prüfung der erzeugten IPA-Datei sind bestanden. [Erfolgreicher Build und Download](https://github.com/juergenzahnde-sudo/datenblick-ios1/actions/runs/39113125497). Die IPA ist noch nicht für ein persönliches Apple-Konto provisioniert; Installation, Bedienung und Telekom-Abruf auf einem iPhone sind noch nicht geprüft. Ein Simulatorlauf wurde nicht ausgeführt.
 
-**Windows und 0-€-Budget:** Der vorbereitete Weg verwendet einen öffentlichen GitHub-Cloud-Build und AltStore Classic mit kostenloser persönlicher Apple-Signierung. App und Widget bleiben eigenständig. Die Signierung muss spätestens alle sieben Tage erneuert werden. Die vollständige Einrichtung steht in [WINDOWS-KOSTENLOS.md](WINDOWS-KOSTENLOS.md). Dafür ist kein TestFlight-Zugang erforderlich; der erste echte Build und die Installation stehen noch aus.
+**Windows und 0-€-Budget:** Der Weg verwendet einen öffentlichen GitHub-Cloud-Build und AltStore Classic mit kostenloser persönlicher Apple-Signierung. App und Widget bleiben eigenständig. Die Signierung muss spätestens alle sieben Tage erneuert werden. Die vollständige Einrichtung steht in [WINDOWS-KOSTENLOS.md](WINDOWS-KOSTENLOS.md). Dafür ist kein TestFlight-Zugang erforderlich; nach dem erfolgreichen Cloud-Build steht jetzt die Installation auf deinem iPhone an.
 
 ## Enthaltene Funktionen
 
@@ -55,7 +55,7 @@ xcodebuild -project Datenblick.xcodeproj -scheme Datenblick \
   -derivedDataPath build CODE_SIGNING_ALLOWED=NO build
 ```
 
-Die Swift-Package-Tests prüfen Decoder, Einheiten, ungültige Antworten, Speichertrennung und Berechnungen. Sie sind separat vom App-Scheme auszuführen. Der Workflow `.github/workflows/ios.yml` führt diese Tests und einen Simulator-Build auf einem macOS-Runner aus. Er wird manuell gestartet und läuft nur in öffentlichen Repositories. `.github/workflows/free-ipa.yml` baut eine iPhone-App mit Widget und paketiert sie für die persönliche Neusignierung unter Windows. Er startet beim Hochladen geänderter App-, Test-, Projekt- oder Build-Dateien auf `main` sowie manuell über **Actions → Free iPhone IPA → Run workflow**. Änderungen nur an der Dokumentation starten keinen Build. **Der erste native Build steht noch aus; den tatsächlichen Stand zeigt GitHub Actions.**
+Die Swift-Package-Tests prüfen Decoder, Einheiten, ungültige Antworten, Speichertrennung und Berechnungen. Sie sind separat vom App-Scheme auszuführen. Der Workflow `.github/workflows/ios.yml` führt diese Tests und einen Simulator-Build auf einem macOS-Runner aus. Er wird manuell gestartet und läuft nur in öffentlichen Repositories; dieser separate Simulator-Workflow wurde noch nicht ausgeführt. `.github/workflows/free-ipa.yml` baut eine iPhone-App mit Widget und paketiert sie für die persönliche Neusignierung unter Windows. Er startet beim Hochladen geänderter App-, Test-, Projekt- oder Build-Dateien auf `main` sowie manuell über **Actions → Free iPhone IPA → Run workflow**. Änderungen nur an der Dokumentation starten keinen Build. **Der iPhone-Workflow wurde am 18.10.2026 erfolgreich ausgeführt.** Die Download-Artefakte werden einen Tag aufbewahrt; spätere Downloads benötigen gegebenenfalls einen neuen manuellen Lauf.
 
 Projektdateien und Icon sind bereits generiert. Falls Swift-Dateien hinzukommen, auf Windows oder macOS mit Node.js erneut ausführen:
 
@@ -65,7 +65,7 @@ node scripts/generate-icon.mjs
 node scripts/verify-project.mjs
 ```
 
-Vor einer Weitergabe müssen der native Build und die Bedienung auf einem echten Gerät geprüft werden, insbesondere Telekom-Abfrage, Einheiten, Cache bei WLAN, Quellenwechsel, App-Gruppe, Widget-Galerie, große Schrift und Warnberechtigung. Zwei Prozesse teilen den Cache über UserDefaults; Snapshot und Verlauf sind keine gemeinsame Datenbanktransaktion. Die App schreibt den Verlauf, die Widget-Erweiterung nur den Snapshot. Das vermeidet konkurrierende Verlaufsschreiber, ersetzt jedoch keine transaktionale Datenbank.
+Der native Gerätebuild ist geprüft. Vor einer Weitergabe muss die Bedienung auf einem echten Gerät geprüft werden, insbesondere Telekom-Abfrage, Einheiten, Cache bei WLAN, Quellenwechsel, App-Gruppe, Widget-Galerie, große Schrift und Warnberechtigung. Zwei Prozesse teilen den Cache über UserDefaults; Snapshot und Verlauf sind keine gemeinsame Datenbanktransaktion. Die App schreibt den Verlauf, die Widget-Erweiterung nur den Snapshot. Das vermeidet konkurrierende Verlaufsschreiber, ersetzt jedoch keine transaktionale Datenbank.
 
 Bei persönlicher Neusignierung mit AltStore Classic können App-Group-Kennungen um die Team-ID ergänzt werden. `AppGroupResolver` liest dafür ausschließlich die eigenen Provisionierungs-/Bundle-Metadaten, akzeptiert die konfigurierte Gruppe oder ihre eindeutig passende AltStore-Teamvariante und verwendet keine privaten APIs. Der Parser validiert keine CMS-Signatur; die Berechtigung für den gewählten Container erzwingt iOS anhand der tatsächlichen Signatur.
 

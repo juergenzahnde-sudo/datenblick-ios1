@@ -1,6 +1,8 @@
 # Datenblick kostenlos mit Windows installieren
 
-Du behältst eine eigenständige iOS-App mit Widget. Ein öffentlicher GitHub-Cloud-Mac erzeugt die App-Datei; AltStore Classic auf Windows signiert und installiert sie mit deinem kostenlosen Apple-Konto. Du brauchst keinen eigenen Mac und kein kostenpflichtiges Developer-Abonnement. **Dieser Weg ist vorbereitet, aber auf deinem iPhone noch nicht getestet.**
+Du behältst eine eigenständige iOS-App mit Widget. Ein öffentlicher GitHub-Cloud-Mac erzeugt die App-Datei; AltStore Classic auf Windows signiert und installiert sie mit deinem kostenlosen Apple-Konto. Du brauchst keinen eigenen Mac und kein kostenpflichtiges Developer-Abonnement. **Der Cloud-Build ist am 18.10.2026 erfolgreich durchgelaufen; die Installation auf deinem iPhone ist noch nicht getestet.**
+
+Für dein Repository [juergenzahnde-sudo/datenblick-ios1](https://github.com/juergenzahnde-sudo/datenblick-ios1) sind Konto, Upload und Build bereits erledigt. [Lade die fertige App-Datei hier herunter](https://github.com/juergenzahnde-sudo/datenblick-ios1/actions/runs/39113125497/artifacts/12131530617), entpacke das ZIP und fahre bei **Schritt 4** fort. Dieser erste Download bleibt bis 19.10.2026 um 10:54 Uhr (Europe/Berlin) verfügbar. Danach den Workflow unter Actions erneut manuell starten.
 
 Der Aufwand: kostenlose Konten, einmalige Einrichtung auf Windows und eine Erneuerung der Signierung spätestens alle sieben Tage. Die Erneuerung benötigt keinen neuen Cloud-Build, solange sich der App-Code nicht ändert.
 
@@ -65,7 +67,7 @@ Falls AltStore nach enthaltenen Erweiterungen fragt, **Keep App Extensions** wä
 
 Öffne Datenblick nach der Installation mindestens einmal. Für den ersten Funktionstest kannst du ausdrücklich markierte Demodaten auswählen. Für echte Telekom-Daten anschließend auf **Telekom** wechseln, mobile Daten deiner Telekom-SIM verwenden und den Abruf starten. Die Telekom-Erkennung bleibt experimentell und muss mit deinem Anschluss geprüft werden.
 
-Danach Datenblick über die Widget-Auswahl auf dem Home- oder Sperrbildschirm hinzufügen. Die App erkennt die von AltStore angepasste gemeinsame App-Gruppe aus ihren eigenen signierten Metadaten. Dieser Mechanismus basiert auf dem veröffentlichten AltStore-Quellcode; der komplette Weg benötigt noch den ersten Cloud-Build und Gerätetest.
+Danach Datenblick über die Widget-Auswahl auf dem Home- oder Sperrbildschirm hinzufügen. Die App erkennt die von AltStore angepasste gemeinsame App-Gruppe aus ihren eigenen signierten Metadaten. Dieser Mechanismus basiert auf dem veröffentlichten AltStore-Quellcode und benötigt noch den Test nach der persönlichen Signierung auf deinem iPhone.
 
 ## 6. Einmal pro Woche erneuern
 
@@ -75,7 +77,7 @@ Eine neue IPA ist nur bei App-Updates nötig. Verwende für Erneuerungen dasselb
 
 ## Was weiterhin offen ist
 
-Das Projekt ist lokal strukturell geprüft. Die zehn Selbsttests des IPA-Strukturprüfers wurden auf künstlichen Beispielen ausgeführt; sie sind kein iOS-Build. Der tatsächliche Stand des ersten Xcode-Builds ist unter **Actions** im Repository sichtbar. Persönliche Signierung, Widget-Anzeige und Telekom-Antworten müssen anschließend auf deinem iPhone geprüft werden.
+Der iPhone-Build mit Widget, alle 53 Swift-Kerntests und die Strukturprüfung der echten IPA-Datei sind am 18.10.2026 auf dem Cloud-Mac erfolgreich durchgelaufen. Zusätzlich sind die zehn künstlichen Selbsttests des IPA-Prüfers bestanden. Persönliche Signierung, Widget-Anzeige und Telekom-Antworten müssen anschließend auf deinem iPhone geprüft werden.
 
 ## Quellen
 
